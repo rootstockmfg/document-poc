@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "liquibase": "^4.28.1"
+  }
+}
