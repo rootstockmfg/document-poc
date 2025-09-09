@@ -36,44 +36,12 @@ start:
 clean:
 	$(MVN) clean
 
-liquibase-update:
-	@if [ -n "$(NIX_SHELL)" ]; then \
-	  echo "Running Liquibase inside nix environment..."; \
-	  $(NIX_RUN) "$(LIQUIBASE_CMD) update"; \
-	else \
-	  echo "Running Liquibase from PATH..."; \
-	  $(LIQUIBASE_CMD) update; \
-	fi
+db-update:
+	$(LIQUIBASE_CMD) update; \
 
-liquibase-rollback:
+db-rollback:
 	@read -p "Rollback to tag/changeset/rollbackCount? (e.g. rollbackCount 1 or rollback <tag>) : " RB && \
-	if [ -n "$(NIX_SHELL)" ]; then \
-	  echo "Running Liquibase rollback inside nix environment..."; \
-	  $(NIX_RUN) "$(LIQUIBASE_CMD) $$RB"; \
-	else \
-	  echo "Running Liquibase rollback from PATH..."; \
-	  $(LIQUIBASE_CMD) $$RB; \
-	fi
+	$(LIQUIBASE_CMD) $$RB;
 
-# Maven-backed Liquibase targets (non-interactive)
-.PHONY: liquibase-mvn-update liquibase-mvn-rollback
-
-# Usage: make liquibase-mvn-update LIQUIBASE_URL=jdbc:... LIQUIBASE_USER=user LIQUIBASE_PASS=pass
-liquibase-mvn-update:
-	@echo "Running Liquibase via Maven plugin..."
-	$(MVN) liquibase:update \
-		-Dliquibase.url="$(LIQUIBASE_URL)" \
-		-Dliquibase.username="$(LIQUIBASE_USER)" \
-		-Dliquibase.password="$(LIQUIBASE_PASS)"
-
-# Usage: make liquibase-mvn-rollback COUNT=1 LIQUIBASE_URL=... LIQUIBASE_USER=... LIQUIBASE_PASS=...
-liquibase-mvn-rollback:
-	@if [ -n "$(COUNT)" ]; then \
-	  ROLL_ARG=-Dliquibase.rollbackCount=$(COUNT); \
-	else \
-	  echo "Please pass COUNT=... to specify rollbackCount (e.g. make liquibase-mvn-rollback COUNT=1)"; exit 1; \
-	fi; \
-	$(MVN) liquibase:rollback $$ROLL_ARG \
-		-Dliquibase.url="$(LIQUIBASE_URL)" \
-		-Dliquibase.username="$(LIQUIBASE_USER)" \
-		-Dliquibase.password="$(LIQUIBASE_PASS)"
+db-reset:
+	$(LIQUIBASE_CMD) drop-all
