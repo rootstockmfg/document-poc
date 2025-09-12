@@ -1,8 +1,8 @@
 services:
-  ollama:
-    image: 'ollama/ollama:latest'
-    ports:
-      - '11434'
+  # ollama:
+  #   image: 'ollama/ollama:latest'
+  #   ports:
+  #     - '11434'
   pgvector:
     image: 'pgvector/pgvector:pg16'
     environment:
@@ -12,4 +12,4 @@ services:
     labels:
       - "org.springframework.boot.service-connection=postgres"
     ports:
-      - '5432'
+      - 55559:5432
