@@ -6,6 +6,7 @@ target/
 .env
 # Filesystem Upload Location
 upload-dir
+logs/
 
 ### STS ###
 .apt_generated

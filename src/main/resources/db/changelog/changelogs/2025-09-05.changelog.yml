@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2025-09-05-1
+      author: Craig Gardner
+      description: Set up the database
+      changes:
+        - sql:
+            dbms: 'postgresql'
+            sql: "CREATE SCHEMA IF NOT EXISTS documents;"
+            stripComments: true
+        - sql:
+            dbms: 'postgresql'
+            sql: "CREATE EXTENSION IF NOT EXISTS vector;"
+        - sql:
+            dbms: 'postgresql'
+            sql: "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
+        - createTable:
+            schemaName: documents
+            tableName: vector_store
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: 'uuid_generate_v4()'
+                  constraints:
+                    unique: true
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: embedding
+                  type: vector(1024)
+              - column:
+                  name: metadata
+                  type: json
+        - tagDatabase:
+            tag: init
+      rollback:
+        - dropTable:
+            schemaName: documents
+            tableName: documents
+        - sql:
+            sql: "DROP SCHEMA IF EXISTS documents CASCADE;"

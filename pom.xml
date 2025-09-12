@@ -152,6 +152,26 @@
 			<artifactId>postgresql</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
+		<dependency>
+			<groupId>net.sourceforge.tess4j</groupId>
+			<artifactId>tess4j</artifactId>
+			<version>5.16.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.lept4j/lept4j -->
+		<dependency>
+			<groupId>net.sourceforge.lept4j</groupId>
+			<artifactId>lept4j</artifactId>
+			<version>1.21.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.netty/netty-resolver-dns-native-macos -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-resolver-dns-native-macos</artifactId>
+			<version>4.2.6.Final</version>
+			<classifier>osx-aarch_64</classifier>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -190,6 +210,29 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+				<execution>
+					<id>copy-resources</id>
+					<!-- here the phase you need -->
+					<phase>validate</phase>
+					<goals>
+					<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					<outputDirectory>${basedir}/target/classes</outputDirectory>
+					<resources>          
+						<resource>
+							<directory>lib</directory>
+							<filtering>false</filtering>
+						</resource>
+					</resources>              
+					</configuration>            
+				</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
