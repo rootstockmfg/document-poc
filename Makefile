@@ -33,6 +33,18 @@ package:
 start:
 	$(MVN) spring-boot:run
 
+docker-compose:
+	docker-compose -f compose.yaml up -d
+
+docker-build:
+	docker-compose -f compose.yaml build
+
+docker-start: docker-build
+	docker-compose -f compose.yaml up document-poc
+
+docker-shell:
+	docker-compose -f compose.yaml run -it document-poc /bin/bash
+
 clean:
 	$(MVN) clean
 

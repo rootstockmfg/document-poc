@@ -42,9 +42,4 @@
         <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
-    <logger name="io.netty" level="debug" additivity="false">
-        <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
-    </logger>
-
 </configuration>
