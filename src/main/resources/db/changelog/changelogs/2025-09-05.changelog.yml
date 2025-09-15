@@ -28,6 +28,8 @@ databaseChangeLog:
               - column:
                   name: content
                   type: text
+                  constraints:
+                    unique: true
               - column:
                   name: embedding
                   type: vector(1024)
