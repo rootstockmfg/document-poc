@@ -26,3 +26,6 @@ services:
       - 'SERVER_PORT=8080'
       - 'TESSDATA_PREFIX=/usr/share/tessdata'
       - 'SPRING_AI_OLLAMA_BASE_URL=http://host.docker.internal:11434'
+      - 'SPRING_AI_OLLAMA_INIT_PULL_MODEL_STRATEGY=when_missing'
+    volumes:
+      - './logs:/opt/app/logs'

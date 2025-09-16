@@ -5,6 +5,9 @@ LIQUIBASE_CMD = liquibase
 
 NIX_SHELL = $(shell test -f flake.nix && echo flake || (test -f shell.nix && echo nix) || echo)
 
+APP = document-poc
+COMPOSE = docker-compose -f compose.yaml
+
 ifeq ($(NIX_SHELL),flake)
   NIX_RUN = direnv exec . -- flake run --command
 else ifeq ($(NIX_SHELL),nix)
@@ -34,16 +37,23 @@ start:
 	$(MVN) spring-boot:run
 
 docker-compose:
-	docker-compose -f compose.yaml up -d
+	$(COMPOSE) up -d
 
 docker-build:
-	docker-compose -f compose.yaml build
+	$(COMPOSE) build
 
 docker-start: docker-build
-	docker-compose -f compose.yaml up -d document-poc
+	$(COMPOSE) up -d $(APP)
+
+docker-stop:
+	$(COMPOSE) stop $(APP)
+	$(COMPOSE) rm -f $(APP)
 
 docker-shell:
-	docker-compose -f compose.yaml run -it document-poc /bin/bash
+	$(COMPOSE) run -it $(APP) /bin/bash
+
+docker-restart: docker-build
+	$(COMPOSE) restart $(APP)
 
 clean:
 	$(MVN) clean

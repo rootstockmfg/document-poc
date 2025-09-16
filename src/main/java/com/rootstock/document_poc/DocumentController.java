@@ -4,9 +4,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -28,6 +32,7 @@ public class DocumentController {
 
   private final Tesseract ocr;
   private final VectorStore vectorStore;
+  private final ChatClient chatClient;
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Mono<ResponseEntity<String>> createDocument(@RequestPart("file") Mono<FilePart> file) {
@@ -60,7 +65,10 @@ public class DocumentController {
   }
 
   @GetMapping
-  public ResponseEntity<String> getMethodName() {
-    return ResponseEntity.ok("Hello World");
+  public Mono<ResponseEntity<String>> askQuestion(@RequestParam String question) {
+    return chatClient.prompt(question).stream().content()
+    .collectList()
+    .map(s -> String.join("", s))
+    .map(ResponseEntity::ok);
   }
 }
