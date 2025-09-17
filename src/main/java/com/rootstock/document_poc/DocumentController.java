@@ -4,12 +4,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.HttpStatus;
@@ -66,9 +64,10 @@ public class DocumentController {
 
   @GetMapping
   public Mono<ResponseEntity<String>> askQuestion(@RequestParam String question) {
-    return chatClient.prompt(question).stream().content()
-    .collectList()
-    .map(s -> String.join("", s))
-    .map(ResponseEntity::ok);
+    return chatClient.prompt(question).stream()
+        .content()
+        .collectList()
+        .map(s -> String.join("", s))
+        .map(ResponseEntity::ok);
   }
 }

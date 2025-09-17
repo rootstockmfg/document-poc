@@ -1,4 +1,4 @@
-package com.rootstock.document_poc.service;
+package com.rootstock.document_poc.config;
 
 import net.sourceforge.tess4j.Tesseract;
 import org.springframework.context.annotation.Bean;
