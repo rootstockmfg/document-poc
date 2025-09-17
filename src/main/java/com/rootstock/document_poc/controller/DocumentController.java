@@ -1,4 +1,4 @@
-package com.rootstock.document_poc;
+package com.rootstock.document_poc.controller;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
