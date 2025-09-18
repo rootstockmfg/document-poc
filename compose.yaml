@@ -14,16 +14,16 @@ services:
     ports:
       - 55559:5432
 
-  document-poc:
-    build: .
-    stdin_open: true
-    tty: true 
-    ports:
-      - 8180:8080
-    env_file: .env
-    environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://pgvector:5432/mydatabase'
-      - 'SERVER_PORT=8080'
-      - 'TESSDATA_PREFIX=/usr/share/tessdata'
-    volumes:
-      - './logs:/opt/app/logs'
+  # document-poc:
+  #   build: .
+  #   stdin_open: true
+  #   tty: true 
+  #   ports:
+  #     - 8180:8080
+  #   env_file: .env
+  #   environment:
+  #     - 'SPRING_DATASOURCE_URL=jdbc:postgresql://pgvector:5432/mydatabase'
+  #     - 'SERVER_PORT=8080'
+  #     - 'TESSDATA_PREFIX=/usr/share/tessdata'
+  #   volumes:
+  #     - './logs:/opt/app/logs'

@@ -16,6 +16,8 @@ else
   NIX_RUN =
 endif
 
+-include .env
+
 .PHONY: help build package start clean liquibase-update liquibase-rollback
 
 help:
@@ -40,10 +42,10 @@ docker-compose:
 	$(COMPOSE) up -d
 
 docker-build:
-	$(COMPOSE) build
+	docker build . --tag $(APP):latest
 
-docker-start: docker-build
-	$(COMPOSE) up -d $(APP)
+docker-start: docker-build docker-compose
+	docker run --rm -it --env-file .env -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:55559/mydatabase -e TESSDATA_PREFIX=/usr/share/tessdata -p $(PORT):$(PORT) --name $(APP) $(APP):latest
 
 docker-stop:
 	$(COMPOSE) stop $(APP)

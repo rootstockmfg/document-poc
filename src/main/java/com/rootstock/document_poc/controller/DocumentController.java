@@ -1,5 +1,6 @@
 package com.rootstock.document_poc.controller;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -7,11 +8,11 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,27 +33,47 @@ public class DocumentController {
   private final VectorStore vectorStore;
   private final ChatClient chatClient;
 
-  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(consumes = {"multipart/form-data"})
   public Mono<ResponseEntity<String>> createDocument(@RequestPart("file") Mono<FilePart> file) {
     return file.flatMap(
-            (FilePart fp) -> {
+            (fp) -> {
+              Path tempFile;
               try {
-                Path tempFile = Files.createTempFile("temp", ".pdf");
-                return fp.transferTo(tempFile)
-                    .then(Mono.fromCallable(() -> ocr.doOCR(tempFile.toFile())));
-              } catch (Exception e) {
+                tempFile = Files.createTempFile("temp", ".pdf");
+              } catch (IOException e) {
                 return Mono.error(e);
               }
+              return fp.transferTo(tempFile)
+                  .then(Mono.just(tempFile))
+                  .map(
+                      f -> {
+                        try {
+                          log.info("Performing OCR on file: {}", f);
+                          return ocr.doOCR(f.toFile());
+                        } catch (TesseractException e) {
+                          return e;
+                        }
+                      })
+                  .map(
+                      c -> {
+                        DocumentControllerPostRequest p = new DocumentControllerPostRequest();
+                        p.setContent(c.toString()).setTenantId("something");
+                        return p;
+                      })
+                  .doOnError(Mono::error);
             })
         .map(
-            text -> {
+            (p) -> {
+              String content = p.getContent();
+              String tenantId = p.getTenantId();
+              log.info("Extracted content: {}", content);
               vectorStore.add(
                   List.of(
                       Document.builder()
-                          .text(text)
-                          .metadata(Map.of("tenantId", "some-tenant-id"))
+                          .text(content)
+                          .metadata(Map.of("tenantId", tenantId))
                           .build()));
-              return text;
+              return content;
             })
         .map(ResponseEntity::ok)
         .doOnError(
