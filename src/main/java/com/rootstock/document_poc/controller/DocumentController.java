@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.http.HttpStatus;
@@ -86,8 +87,14 @@ public class DocumentController {
   }
 
   @GetMapping
-  public Mono<ResponseEntity<String>> askQuestion(@RequestParam String question) {
-    return chatClient.prompt(question).stream()
+  public Mono<ResponseEntity<String>> askQuestion(
+      @RequestParam String question, @RequestParam String tenantId) {
+    return chatClient
+        .prompt()
+        .user(question)
+        .advisors(
+            a -> a.param(QuestionAnswerAdvisor.FILTER_EXPRESSION, "tenantId == '" + tenantId + "'"))
+        .stream()
         .content()
         .collectList()
         .map(s -> String.join("", s))
