@@ -34,7 +34,8 @@ public class DocumentController {
   private final ChatClient chatClient;
 
   @PostMapping(consumes = {"multipart/form-data"})
-  public Mono<ResponseEntity<String>> createDocument(@RequestPart("file") Mono<FilePart> file) {
+  public Mono<ResponseEntity<String>> createDocument(
+      @RequestPart("file") Mono<FilePart> file, @RequestPart("tenantId") String tenantId) {
     return file.flatMap(
             (fp) -> {
               Path tempFile;
@@ -56,22 +57,23 @@ public class DocumentController {
                       })
                   .map(
                       c -> {
-                        DocumentControllerPostRequest p = new DocumentControllerPostRequest();
-                        p.setContent(c.toString()).setTenantId("something");
-                        return p;
+                        return DocumentControllerPostRequest.builder()
+                            .content(c.toString())
+                            .tenantId(tenantId)
+                            .build();
                       })
                   .doOnError(Mono::error);
             })
         .map(
             (p) -> {
               String content = p.getContent();
-              String tenantId = p.getTenantId();
-              log.info("Extracted content: {}", content);
+              String requestTenantId = p.getTenantId();
+              log.info("Extracted content for tenant: {}", requestTenantId);
               vectorStore.add(
                   List.of(
                       Document.builder()
                           .text(content)
-                          .metadata(Map.of("tenantId", tenantId))
+                          .metadata(Map.of("tenantId", requestTenantId))
                           .build()));
               return content;
             })
