@@ -37,7 +37,7 @@ public class DocumentController {
   public Mono<ResponseEntity<String>> createDocument(
       @RequestPart("file") Mono<FilePart> file, @RequestPart("tenantId") String tenantId) {
     return file.flatMap(
-            (fp) -> {
+            fp -> {
               Path tempFile;
               try {
                 tempFile = Files.createTempFile("temp", ".pdf");
@@ -65,7 +65,7 @@ public class DocumentController {
                   .doOnError(Mono::error);
             })
         .map(
-            (p) -> {
+            p -> {
               String content = p.getContent();
               String requestTenantId = p.getTenantId();
               log.info("Extracted content for tenant: {}", requestTenantId);
