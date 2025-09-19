@@ -13,7 +13,7 @@ COPY --from=dependencies /opt/app/ /opt/app
 
 COPY src /opt/app/src
 
-RUN mvn -B -e clean install -DskipTests
+RUN mvn -B -e clean package -DskipTests
 
 FROM eclipse-temurin:21-alpine AS run
 

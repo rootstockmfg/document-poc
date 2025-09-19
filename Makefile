@@ -16,6 +16,9 @@ else
   NIX_RUN =
 endif
 
+DOCKER_RUN_ENV = --env-file .env -e SPRING_AI_OLLAMA_BASE_URL=http://host.docker.internal:11434 \
+ -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:55559/mydatabase -e TESSDATA_PREFIX=/usr/share/tessdata
+
 -include .env
 
 .PHONY: help build package start clean liquibase-update liquibase-rollback
@@ -41,11 +44,14 @@ start:
 docker-compose:
 	$(COMPOSE) up -d
 
+docker-build-dependencies:
+	docker build --target dependencies . --tag $(APP):dependencies
+
 docker-build:
-	docker build . --tag $(APP):latest
+	docker build --cache-from=$(APP):dependencies . --tag $(APP):latest
 
 docker-start: docker-build docker-compose
-	docker run --rm -it --env-file .env -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:55559/mydatabase -e TESSDATA_PREFIX=/usr/share/tessdata -p $(PORT):$(PORT) --name $(APP) $(APP):latest
+	docker run --rm -it $(DOCKER_RUN_ENV) -p $(PORT):$(PORT) --name $(APP) $(APP):latest
 
 docker-stop:
 	$(COMPOSE) stop $(APP)

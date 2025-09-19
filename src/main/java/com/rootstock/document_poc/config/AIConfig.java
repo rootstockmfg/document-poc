@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AIConfig {
-    @Bean
-    public List<Advisor> defaultAdvisors(VectorStore vectorStore) {
-        return List.of(new QuestionAnswerAdvisor(vectorStore));
-    }
+  @Bean
+  public List<Advisor> defaultAdvisors(VectorStore vectorStore) {
+    return List.of(new QuestionAnswerAdvisor(vectorStore));
+  }
 
-    @Bean
-    public ChatClient chatClient(ChatClient.Builder chatClientBuilder,
-            List<Advisor> defaultAdvisors) {
-        return chatClientBuilder.defaultAdvisors(defaultAdvisors).build();
-    }
+  @Bean
+  public ChatClient chatClient(
+      ChatClient.Builder chatClientBuilder, List<Advisor> defaultAdvisors) {
+    return chatClientBuilder.defaultAdvisors(defaultAdvisors).build();
+  }
 }
