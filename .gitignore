@@ -8,6 +8,12 @@ target/
 upload-dir
 logs/
 
+### UI ###
+
+src/main/resources/static/
+document-ui/build
+node_modules/
+
 ### STS ###
 .apt_generated
 .classpath

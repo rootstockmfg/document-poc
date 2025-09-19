@@ -35,6 +35,9 @@ help:
 build:
 	$(MVN) package
 
+build-ui:
+	cd document-ui && npm run build
+
 package:
 	$(MVN) -DskipTests package
 
@@ -49,6 +52,9 @@ docker-build-dependencies:
 
 docker-build:
 	docker build --cache-from=$(APP):dependencies . --tag $(APP):latest
+
+docker-build-ui:
+	docker build --target=build-ui . --tag $(APP)-ui:latest
 
 docker-start: docker-build docker-compose
 	docker run --rm -it $(DOCKER_RUN_ENV) -p $(PORT):$(PORT) --name $(APP) $(APP):latest

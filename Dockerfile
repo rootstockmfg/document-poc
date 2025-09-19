@@ -5,6 +5,14 @@ COPY pom.xml .
 
 RUN mvn -B -e org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline -DexcludeArtifactIds=domain
 
+FROM node:24-alpine AS build-ui
+
+WORKDIR /opt/app
+COPY document-ui /opt/app
+
+RUN npm install && \
+    npm run build
+
 FROM maven:3-eclipse-temurin-21-alpine AS build
 
 WORKDIR /opt/app
@@ -17,7 +25,8 @@ RUN mvn -B -e clean package -DskipTests
 
 FROM eclipse-temurin:21-alpine AS run
 
-RUN apk update && apk add tesseract-ocr tesseract-ocr-data-eng leptonica
+RUN apk update && \
+    apk add tesseract-ocr tesseract-ocr-data-eng leptonica
 
 WORKDIR /opt/app
 COPY --from=build /opt/app/target/*.jar /app.jar
