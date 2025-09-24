@@ -20,6 +20,7 @@ WORKDIR /opt/app
 COPY --from=dependencies /root/.m2 /root/.m2
 COPY --from=dependencies /opt/app/ /opt/app
 COPY --from=build-ui /opt/app/ui/dist /opt/app/src/main/resources/static
+COPY --from=build-ui /opt/app/node_modules/@salesforce-ux/design-system/assets/icons /opt/app/src/main/resources/static/assets/icons
 
 COPY src /opt/app/src
 
