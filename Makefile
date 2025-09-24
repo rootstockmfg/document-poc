@@ -32,11 +32,14 @@ help:
 	@echo "  make liquibase-update  - run liquibase update using nix-shell if available"
 	@echo "  make liquibase-rollback - run liquibase rollbackCount 1 using nix-shell if available"
 
+ui:
+	npm run start
+
 build:
 	$(MVN) package
 
 build-ui:
-	cd document-ui && npm run build
+	npm run build
 
 package:
 	$(MVN) -DskipTests package

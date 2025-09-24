@@ -1,0 +1,7 @@
+:root {
+  --slds-g-spacing-3: 20px;
+}
+
+body {
+  padding: var(--slds-g-spacing-3, 20px);
+}

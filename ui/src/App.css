@@ -1,0 +1,73 @@
+.question-body{
+  padding: var(--slds-g-spacing-3, 12px);
+}
+
+.container {
+  display: flex;          /* Default is row */
+  flex-wrap: nowrap;      /* Prevent wrapping */
+  width: 100%;            /* Ensure full width */
+}
+
+.left {
+  flex: 0 0 30%;          /* Fixed 30% width */
+  padding: 20px;
+  padding: var(--slds-g-spacing-3, 20px);
+  box-sizing: border-box;
+  min-width: 0;           /* Prevent overflow issues */
+}
+
+.right {
+  flex: 0 0 70%;          /* Fixed 70% width */
+  padding: 20px;
+  box-sizing: border-box;
+  min-width: 0;           /* Prevent overflow issues */
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allows items to wrap if needed */
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+/* Justify content alignment */
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* Align items alignment */
+.align-start {
+  align-items: flex-start;
+}
+.align-center {
+  align-items: center;
+}
+.align-end {
+  align-items: flex-end;
+}
+.align-stretch {
+  align-items: stretch;
+}
+.align-baseline {
+  align-items: baseline;
+}

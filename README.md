@@ -1,16 +1,11 @@
 # Document AI POC
 
-A proof of concept application that demonstrates document processing
-capabilities using AI technologies. The system combines OCR (Optical Character
-Recognition) for text extraction from documents with vector storage and
-AI-powered question answering capabilities.
+A proof of concept application that demonstrates document processing capabilities using AI technologies. The system combines OCR (Optical Character Recognition) for text extraction from documents with vector storage and AI-powered question answering capabilities.
 
 ## Features
 
-- **Document Upload & OCR**: Upload PDF and image files for text extraction
-  using Tesseract OCR
-- **AI-Powered Q&A**: Ask questions about your uploaded documents using Spring
-  AI
+- **Document Upload & OCR**: Upload PDF and image files for text extraction using Tesseract OCR
+- **AI-Powered Q&A**: Ask questions about your uploaded documents using Spring AI
 - **Vector Storage**: Store and retrieve document embeddings using PGVector
 - **Multi-tenant Support**: Isolate documents and queries by tenant ID
 - **REST API**: RESTful endpoints for document management and querying
@@ -29,7 +24,6 @@ The application consists of:
 ## Technology Stack
 
 ### Backend
-
 - **Java 21** - Programming language
 - **Spring Boot 3.5.5** - Application framework
 - **Spring AI 1.0.1** - AI integration framework
@@ -42,12 +36,10 @@ The application consists of:
 - **Lombok** - Code generation
 
 ### Frontend
-
 - **React 19.1.1** - JavaScript framework
 - **React Scripts 5.0.1** - Build tools
 
 ### Infrastructure
-
 - **Docker & Docker Compose** - Containerization
 - **Maven** - Build automation
 - **Heroku** - Deployment platform support
@@ -91,7 +83,8 @@ The application consists of:
    docker-compose up -d pgvector
    ```
 
-2. **Configure environment variables** Create a `.env` file with:
+2. **Configure environment variables**
+   Create a `.env` file with:
    ```env
    SPRING_AI_OPENAI_API_KEY=your-openai-api-key
    # OR for Ollama
@@ -115,7 +108,6 @@ The application consists of:
 ## API Endpoints
 
 ### Upload Document
-
 ```http
 POST /api/documents
 Content-Type: multipart/form-data
@@ -126,7 +118,6 @@ Parameters:
 ```
 
 ### Ask Question
-
 ```http
 GET /api/documents?question=<your-question>&tenantId=<tenant-id>
 ```
@@ -136,7 +127,6 @@ GET /api/documents?question=<your-question>&tenantId=<tenant-id>
 ### Application Properties
 
 The application supports multiple profiles:
-
 - `dev` - Development environment
 - `prod` - Production environment
 
@@ -175,15 +165,12 @@ spring.ai.openai.api-key=${SPRING_AI_OPENAI_API_KEY}
 
 ### Database Management
 
-The project uses Liquibase for database schema management. Migration files are
-located in:
-
+The project uses Liquibase for database schema management. Migration files are located in:
 ```
 src/main/resources/db/changelog/
 ```
 
 To update the database:
-
 ```bash
 make db-update
 ```
@@ -191,13 +178,11 @@ make db-update
 ### Testing
 
 Run tests with:
-
 ```bash
 mvn test
 ```
 
 The application includes Testcontainers for integration testing with:
-
 - PostgreSQL
 - Ollama
 - Various Spring Boot test utilities
@@ -216,45 +201,35 @@ The project includes `heroku.yml` for Heroku deployment:
 ### Docker
 
 Build and run with Docker:
-
 ```bash
-docker build -t document-poc .
-docker run -p 8080:8080 document-poc
+make docker-start
 ```
 
 ## Environment Variables
 
-| Variable                     | Description              | Required              |
-| ---------------------------- | ------------------------ | --------------------- |
-| `SPRING_AI_OPENAI_API_KEY`   | OpenAI API key           | Yes (if using OpenAI) |
-| `SPRING_AI_OLLAMA_BASE_URL`  | Ollama service URL       | Yes (if using Ollama) |
-| `SPRING_DATASOURCE_URL`      | Database connection URL  | Yes                   |
-| `SPRING_DATASOURCE_USERNAME` | Database username        | Yes                   |
-| `SPRING_DATASOURCE_PASSWORD` | Database password        | Yes                   |
-| `PORT`                       | Application port         | No (default: 8080)    |
-| `TESSDATA_PREFIX`            | Tesseract data directory | No                    |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `SPRING_AI_OPENAI_API_KEY` | OpenAI API key | Yes (if using OpenAI) |
+| `SPRING_AI_OLLAMA_BASE_URL` | Ollama service URL | Yes (if using Ollama) |
+| `SPRING_DATASOURCE_URL` | Database connection URL | Yes |
+| `SPRING_DATASOURCE_USERNAME` | Database username | Yes |
+| `SPRING_DATASOURCE_PASSWORD` | Database password | Yes |
+| `PORT` | Application port | No (default: 8080) |
+| `TESSDATA_PREFIX` | Tesseract data directory | No |
 
 ## Architecture Decisions
 
 ### Reactive Programming
-
-The application uses Spring WebFlux for reactive, non-blocking I/O operations,
-making it suitable for handling file uploads and AI processing efficiently.
+The application uses Spring WebFlux for reactive, non-blocking I/O operations, making it suitable for handling file uploads and AI processing efficiently.
 
 ### Vector Storage
-
-PGVector is used for storing document embeddings, enabling semantic search
-capabilities and efficient similarity matching.
+PGVector is used for storing document embeddings, enabling semantic search capabilities and efficient similarity matching.
 
 ### Multi-tenancy
-
-Documents are isolated by tenant ID, allowing multiple organizations or users to
-use the same instance securely.
+Documents are isolated by tenant ID, allowing multiple organizations or users to use the same instance securely.
 
 ### OCR Integration
-
-Tesseract OCR is integrated for extracting text from images and PDFs, with
-native library support for optimal performance.
+Tesseract OCR is integrated for extracting text from images and PDFs, with native library support for optimal performance.
 
 ## Contributing
 
@@ -270,6 +245,4 @@ This project is a proof of concept for document AI capabilities.
 
 ## Support
 
-For questions and support, please refer to the project documentation or create
-an issue in the repository.
-
+For questions and support, please refer to the project documentation or create an issue in the repository.
