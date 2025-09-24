@@ -4,12 +4,12 @@
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "NodeNext",
     "types": ["vite/client"],
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",

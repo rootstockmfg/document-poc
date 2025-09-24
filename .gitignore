@@ -11,7 +11,7 @@ logs/
 ### UI ###
 
 src/main/resources/static/
-document-ui/build
+ui/dist
 node_modules/
 
 ### STS ###
